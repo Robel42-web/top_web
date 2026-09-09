@@ -139,6 +139,27 @@ $router->addRoute('DELETE', '/productos/{id}',
     exit;
 }
 
+// API V3
+if (
+    $relativeUri === '/api/v3' ||
+    str_starts_with($relativeUri, '/api/v3/')
+) {
+
+    require_once '../resources/v3/TaskResource.php';
+
+    $router = new Router('v3', $basePath);
+
+    $taskResource = new TaskResource();
+
+    $router->addRoute('GET', '/tareas', [$taskResource, 'index']);
+    $router->addRoute('GET', '/tareas/{id}', [$taskResource, 'show']);
+    $router->addRoute('POST', '/tareas', [$taskResource, 'store']);
+    $router->addRoute('PUT', '/tareas/{id}', [$taskResource, 'update']);
+
+    $router->dispatch();
+    exit;
+}
+
 
 // Versión inexistente
 header("Content-Type: application/json");

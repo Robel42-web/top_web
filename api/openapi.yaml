@@ -1,0 +1,165 @@
+openapi: 3.0.3
+
+info:
+  title: API V3 - Gestión de Tareas
+  description: API REST para la gestión de tareas utilizando el enfoque API-First.
+  version: 3.0.0
+
+servers:
+  - url: http://topicosweb.celaya.tecnm.mx/20031358/api/public/api/v3
+    description: Servidor VPS de la clase
+
+  - url: http://localhost:8000/api/v3
+    description: Servidor local
+
+paths:
+
+  /tareas:
+    get:
+      summary: Obtener todas las tareas
+      description: Devuelve una lista con todas las tareas registradas.
+      responses:
+        '200':
+          description: Lista de tareas obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tarea'
+
+    post:
+      summary: Crear una nueva tarea
+      description: Crea una nueva tarea.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - titulo
+                - completada
+              properties:
+                titulo:
+                  type: string
+                  example: Estudiar API-First
+                completada:
+                  type: boolean
+                  example: false
+
+      responses:
+        '201':
+          description: Tarea creada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Tarea creada correctamente
+                  id:
+                    type: integer
+                    example: 1
+
+        '400':
+          description: Datos incompletos o inválidos
+
+  /tareas/{id}:
+    get:
+      summary: Obtener una tarea por ID
+      description: Devuelve una tarea específica mediante su identificador.
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la tarea
+          schema:
+            type: integer
+            example: 1
+
+      responses:
+        '200':
+          description: Tarea encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tarea'
+
+        '404':
+          description: Tarea no encontrada
+
+    put:
+      summary: Actualizar una tarea
+      description: Actualiza el título y estado de una tarea existente.
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la tarea
+          schema:
+            type: integer
+            example: 1
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - titulo
+                - completada
+              properties:
+                titulo:
+                  type: string
+                  example: Estudiar API-First y Swagger
+                completada:
+                  type: boolean
+                  example: true
+
+      responses:
+        '200':
+          description: Tarea actualizada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Tarea actualizada correctamente
+
+        '400':
+          description: Datos incompletos o inválidos
+
+        '404':
+          description: Tarea no encontrada
+
+components:
+  schemas:
+    Tarea:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+
+        titulo:
+          type: string
+          example: Estudiar API-First
+
+        completada:
+          type: boolean
+          example: false
+
+        fecha_creacion:
+          type: string
+          format: date-time
+          example: "2026-09-08T19:18:49Z"
