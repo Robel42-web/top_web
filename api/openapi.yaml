@@ -6,6 +6,9 @@ info:
   version: 3.0.0
 
 servers:
+  - url: http://topicosweb.celaya.tecnm.mx/20031358/api/public/api/v3
+    description: Servidor VPS de la clase
+
   - url: http://localhost:8000/api/v3
     description: Servidor local
 
